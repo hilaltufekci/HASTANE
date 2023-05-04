@@ -1,0 +1,672 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HastaneModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Doktorlar">
+          <Key>
+            <PropertyRef Name="DoktorNo" />
+          </Key>
+          <Property Name="DoktorNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdSoyad" Type="varchar" MaxLength="50" />
+          <Property Name="Brans" Type="varchar" MaxLength="50" />
+          <Property Name="Uzmanlık" Type="varchar" MaxLength="50" />
+          <Property Name="RaporNo" Type="int" />
+        </EntityType>
+        <EntityType Name="HastaBilgileri">
+          <Key>
+            <PropertyRef Name="BilgiNo" />
+          </Key>
+          <Property Name="BilgiNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Teshis" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MUcret" Type="int" />
+          <Property Name="Recete" Type="varchar" MaxLength="50" />
+          <Property Name="TakipDurum" Type="varchar" MaxLength="50" />
+          <Property Name="HastaNo" Type="int" />
+        </EntityType>
+        <EntityType Name="Hastalar">
+          <Key>
+            <PropertyRef Name="HastaNo" />
+          </Key>
+          <Property Name="HastaNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdSoyad" Type="varchar" MaxLength="50" />
+          <Property Name="Yas" Type="int" />
+          <Property Name="Adres" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Kullanicilar">
+          <Key>
+            <PropertyRef Name="KullaniciNo" />
+          </Key>
+          <Property Name="KullaniciNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KullaniciAdi" Type="varchar" MaxLength="50" />
+          <Property Name="Sifre" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Raporlar">
+          <Key>
+            <PropertyRef Name="RaporNo" />
+          </Key>
+          <Property Name="RaporNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RaporTanimi" Type="varchar" MaxLength="50" />
+          <Property Name="OlusturmaTarihi" Type="varchar" MaxLength="50" />
+          <Property Name="SonTarihi" Type="varchar" MaxLength="50" />
+          <Property Name="HastaNo" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Doktorlar_Raporlar">
+          <End Role="Raporlar" Type="Self.Raporlar" Multiplicity="0..1" />
+          <End Role="Doktorlar" Type="Self.Doktorlar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Raporlar">
+              <PropertyRef Name="RaporNo" />
+            </Principal>
+            <Dependent Role="Doktorlar">
+              <PropertyRef Name="RaporNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HastaBilgileri_Hastalar">
+          <End Role="Hastalar" Type="Self.Hastalar" Multiplicity="0..1" />
+          <End Role="HastaBilgileri" Type="Self.HastaBilgileri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastalar">
+              <PropertyRef Name="HastaNo" />
+            </Principal>
+            <Dependent Role="HastaBilgileri">
+              <PropertyRef Name="HastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Raporlar_Hastalar">
+          <End Role="Hastalar" Type="Self.Hastalar" Multiplicity="0..1" />
+          <End Role="Raporlar" Type="Self.Raporlar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastalar">
+              <PropertyRef Name="HastaNo" />
+            </Principal>
+            <Dependent Role="Raporlar">
+              <PropertyRef Name="HastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="DoktorEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AdSoyad" Type="varchar" Mode="In" />
+          <Parameter Name="Brans" Type="varchar" Mode="In" />
+          <Parameter Name="Uzmanlık" Type="varchar" Mode="In" />
+          <Parameter Name="RaporNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DoktorListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="DoktorSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DoktorNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DoktorYenile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DoktorNo" Type="int" Mode="In" />
+          <Parameter Name="AdSoyad" Type="varchar" Mode="In" />
+          <Parameter Name="Brans" Type="varchar" Mode="In" />
+          <Parameter Name="Uzmanlık" Type="varchar" Mode="In" />
+          <Parameter Name="RaporNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="HastaBilgileriEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Teshis" Type="varchar" Mode="In" />
+          <Parameter Name="MUcret" Type="money" Mode="In" />
+          <Parameter Name="Recete" Type="varchar" Mode="In" />
+          <Parameter Name="TakipDurum" Type="varchar" Mode="In" />
+          <Parameter Name="HastaNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="HastaBilgileriSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BilgiNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="HastaBilgileriYenile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="BilgiNo" Type="int" Mode="In" />
+          <Parameter Name="Teshis" Type="varchar" Mode="In" />
+          <Parameter Name="MUcret" Type="money" Mode="In" />
+          <Parameter Name="Recete" Type="varchar" Mode="In" />
+          <Parameter Name="TakipDurum" Type="varchar" Mode="In" />
+          <Parameter Name="HastaNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="HastaBilgisiListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="HastaEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AdSoyad" Type="varchar" Mode="In" />
+          <Parameter Name="Yas" Type="int" Mode="In" />
+          <Parameter Name="Adres" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="HastaListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="HastaSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="HastaNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="HastaYenile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="HastaNo" Type="int" Mode="In" />
+          <Parameter Name="AdSoyad" Type="varchar" Mode="In" />
+          <Parameter Name="Yas" Type="int" Mode="In" />
+          <Parameter Name="Adres" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="KullaniciGiris" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="KullaniciAdi" Type="varchar" Mode="In" />
+          <Parameter Name="Sifre" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="RaporEkle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RaporTanimi" Type="varchar" Mode="In" />
+          <Parameter Name="OlusturmaTarihi" Type="varchar" Mode="In" />
+          <Parameter Name="SonTarihi" Type="varchar" Mode="In" />
+          <Parameter Name="HastaNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RaporListele" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="RaporSil" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RaporNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RaporYenile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="RaporNo" Type="int" Mode="In" />
+          <Parameter Name="RaporTanimi" Type="varchar" Mode="In" />
+          <Parameter Name="OlusturmaTarihi" Type="varchar" Mode="In" />
+          <Parameter Name="SonTarihi" Type="varchar" Mode="In" />
+          <Parameter Name="HastaNo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="HastaneModelStoreContainer">
+          <EntitySet Name="Doktorlar" EntityType="Self.Doktorlar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="HastaBilgileri" EntityType="Self.HastaBilgileri" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Hastalar" EntityType="Self.Hastalar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kullanicilar" EntityType="Self.Kullanicilar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Raporlar" EntityType="Self.Raporlar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Doktorlar_Raporlar" Association="Self.FK_Doktorlar_Raporlar">
+            <End Role="Raporlar" EntitySet="Raporlar" />
+            <End Role="Doktorlar" EntitySet="Doktorlar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HastaBilgileri_Hastalar" Association="Self.FK_HastaBilgileri_Hastalar">
+            <End Role="Hastalar" EntitySet="Hastalar" />
+            <End Role="HastaBilgileri" EntitySet="HastaBilgileri" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Raporlar_Hastalar" Association="Self.FK_Raporlar_Hastalar">
+            <End Role="Hastalar" EntitySet="Hastalar" />
+            <End Role="Raporlar" EntitySet="Raporlar" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HastaneModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Doktorlar">
+          <Key>
+            <PropertyRef Name="DoktorNo" />
+          </Key>
+          <Property Name="DoktorNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Brans" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Uzmanlık" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RaporNo" Type="Int32" />
+        </EntityType>
+        <EntityType Name="HastaBilgileri">
+          <Key>
+            <PropertyRef Name="BilgiNo" />
+          </Key>
+          <Property Name="BilgiNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Teshis" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MUcret" Type="Int32" />
+          <Property Name="Recete" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TakipDurum" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HastaNo" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Hastalar">
+          <Key>
+            <PropertyRef Name="HastaNo" />
+          </Key>
+          <Property Name="HastaNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdSoyad" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Yas" Type="Int32" />
+          <Property Name="Adres" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Kullanicilar">
+          <Key>
+            <PropertyRef Name="KullaniciNo" />
+          </Key>
+          <Property Name="KullaniciNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KullaniciAdi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Sifre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Raporlar">
+          <Key>
+            <PropertyRef Name="RaporNo" />
+          </Key>
+          <Property Name="RaporNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RaporTanimi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OlusturmaTarihi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SonTarihi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="HastaNo" Type="Int32" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Doktorlar_Raporlar">
+          <End Role="Raporlar" Type="Self.Raporlar" Multiplicity="0..1" />
+          <End Role="Doktorlar" Type="Self.Doktorlar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Raporlar">
+              <PropertyRef Name="RaporNo" />
+            </Principal>
+            <Dependent Role="Doktorlar">
+              <PropertyRef Name="RaporNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_HastaBilgileri_Hastalar">
+          <End Role="Hastalar" Type="Self.Hastalar" Multiplicity="0..1" />
+          <End Role="HastaBilgileri" Type="Self.HastaBilgileri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastalar">
+              <PropertyRef Name="HastaNo" />
+            </Principal>
+            <Dependent Role="HastaBilgileri">
+              <PropertyRef Name="HastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Raporlar_Hastalar">
+          <End Role="Hastalar" Type="Self.Hastalar" Multiplicity="0..1" />
+          <End Role="Raporlar" Type="Self.Raporlar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Hastalar">
+              <PropertyRef Name="HastaNo" />
+            </Principal>
+            <Dependent Role="Raporlar">
+              <PropertyRef Name="HastaNo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HastaneEntities4" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Doktorlars" EntityType="Self.Doktorlar" />
+          <EntitySet Name="HastaBilgileris" EntityType="Self.HastaBilgileri" />
+          <EntitySet Name="Hastalars" EntityType="Self.Hastalar" />
+          <EntitySet Name="Kullanicilars" EntityType="Self.Kullanicilar" />
+          <EntitySet Name="Raporlars" EntityType="Self.Raporlar" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <AssociationSet Name="FK_Doktorlar_Raporlar" Association="Self.FK_Doktorlar_Raporlar">
+            <End Role="Raporlar" EntitySet="Raporlars" />
+            <End Role="Doktorlar" EntitySet="Doktorlars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_HastaBilgileri_Hastalar" Association="Self.FK_HastaBilgileri_Hastalar">
+            <End Role="Hastalar" EntitySet="Hastalars" />
+            <End Role="HastaBilgileri" EntitySet="HastaBilgileris" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Raporlar_Hastalar" Association="Self.FK_Raporlar_Hastalar">
+            <End Role="Hastalar" EntitySet="Hastalars" />
+            <End Role="Raporlar" EntitySet="Raporlars" />
+          </AssociationSet>
+          <FunctionImport Name="DoktorEkle">
+            <Parameter Name="AdSoyad" Mode="In" Type="String" />
+            <Parameter Name="Brans" Mode="In" Type="String" />
+            <Parameter Name="Uzmanlık" Mode="In" Type="String" />
+            <Parameter Name="RaporNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DoktorListele" ReturnType="Collection(HastaneModel.DoktorListele_Result)" />
+          <FunctionImport Name="DoktorSil">
+            <Parameter Name="DoktorNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DoktorYenile">
+            <Parameter Name="DoktorNo" Mode="In" Type="Int32" />
+            <Parameter Name="AdSoyad" Mode="In" Type="String" />
+            <Parameter Name="Brans" Mode="In" Type="String" />
+            <Parameter Name="Uzmanlık" Mode="In" Type="String" />
+            <Parameter Name="RaporNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="HastaBilgileriEkle">
+            <Parameter Name="Teshis" Mode="In" Type="String" />
+            <Parameter Name="MUcret" Mode="In" Type="Decimal" />
+            <Parameter Name="Recete" Mode="In" Type="String" />
+            <Parameter Name="TakipDurum" Mode="In" Type="String" />
+            <Parameter Name="HastaNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="HastaBilgileriSil">
+            <Parameter Name="BilgiNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="HastaBilgileriYenile">
+            <Parameter Name="BilgiNo" Mode="In" Type="Int32" />
+            <Parameter Name="Teshis" Mode="In" Type="String" />
+            <Parameter Name="MUcret" Mode="In" Type="Decimal" />
+            <Parameter Name="Recete" Mode="In" Type="String" />
+            <Parameter Name="TakipDurum" Mode="In" Type="String" />
+            <Parameter Name="HastaNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="HastaBilgisiListele" ReturnType="Collection(HastaneModel.HastaBilgisiListele_Result)" />
+          <FunctionImport Name="HastaEkle">
+            <Parameter Name="AdSoyad" Mode="In" Type="String" />
+            <Parameter Name="Yas" Mode="In" Type="Int32" />
+            <Parameter Name="Adres" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="HastaListele" ReturnType="Collection(HastaneModel.HastaListele_Result)" />
+          <FunctionImport Name="HastaSil">
+            <Parameter Name="HastaNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="HastaYenile">
+            <Parameter Name="HastaNo" Mode="In" Type="Int32" />
+            <Parameter Name="AdSoyad" Mode="In" Type="String" />
+            <Parameter Name="Yas" Mode="In" Type="Int32" />
+            <Parameter Name="Adres" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="KullaniciGiris" ReturnType="Collection(HastaneModel.KullaniciGiris_Result)">
+            <Parameter Name="KullaniciAdi" Mode="In" Type="String" />
+            <Parameter Name="Sifre" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="RaporEkle">
+            <Parameter Name="RaporTanimi" Mode="In" Type="String" />
+            <Parameter Name="OlusturmaTarihi" Mode="In" Type="String" />
+            <Parameter Name="SonTarihi" Mode="In" Type="String" />
+            <Parameter Name="HastaNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RaporListele" ReturnType="Collection(HastaneModel.RaporListele_Result)" />
+          <FunctionImport Name="RaporSil">
+            <Parameter Name="RaporNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RaporYenile">
+            <Parameter Name="RaporNo" Mode="In" Type="Int32" />
+            <Parameter Name="RaporTanimi" Mode="In" Type="String" />
+            <Parameter Name="OlusturmaTarihi" Mode="In" Type="String" />
+            <Parameter Name="SonTarihi" Mode="In" Type="String" />
+            <Parameter Name="HastaNo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(HastaneModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(HastaneModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="DoktorListele_Result">
+          <Property Type="Int32" Name="DoktorNo" Nullable="false" />
+          <Property Type="String" Name="AdSoyad" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Brans" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Uzmanlık" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="RaporNo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="HastaBilgisiListele_Result">
+          <Property Type="Int32" Name="BilgiNo" Nullable="false" />
+          <Property Type="String" Name="Teshis" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="MUcret" Nullable="true" />
+          <Property Type="String" Name="Recete" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TakipDurum" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="HastaNo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="HastaListele_Result">
+          <Property Type="Int32" Name="HastaNo" Nullable="false" />
+          <Property Type="String" Name="AdSoyad" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="Yas" Nullable="true" />
+          <Property Type="String" Name="Adres" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="KullaniciGiris_Result">
+          <Property Type="Int32" Name="KullaniciNo" Nullable="false" />
+          <Property Type="String" Name="KullaniciAdi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Sifre" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="RaporListele_Result">
+          <Property Type="Int32" Name="RaporNo" Nullable="false" />
+          <Property Type="String" Name="RaporTanimi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="OlusturmaTarihi" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SonTarihi" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="HastaNo" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HastaneModelStoreContainer" CdmEntityContainer="HastaneEntities4">
+          <EntitySetMapping Name="Doktorlars">
+            <EntityTypeMapping TypeName="HastaneModel.Doktorlar">
+              <MappingFragment StoreEntitySet="Doktorlar">
+                <ScalarProperty Name="DoktorNo" ColumnName="DoktorNo" />
+                <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+                <ScalarProperty Name="Brans" ColumnName="Brans" />
+                <ScalarProperty Name="Uzmanlık" ColumnName="Uzmanlık" />
+                <ScalarProperty Name="RaporNo" ColumnName="RaporNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="HastaBilgileris">
+            <EntityTypeMapping TypeName="HastaneModel.HastaBilgileri">
+              <MappingFragment StoreEntitySet="HastaBilgileri">
+                <ScalarProperty Name="BilgiNo" ColumnName="BilgiNo" />
+                <ScalarProperty Name="Teshis" ColumnName="Teshis" />
+                <ScalarProperty Name="MUcret" ColumnName="MUcret" />
+                <ScalarProperty Name="Recete" ColumnName="Recete" />
+                <ScalarProperty Name="TakipDurum" ColumnName="TakipDurum" />
+                <ScalarProperty Name="HastaNo" ColumnName="HastaNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Hastalars">
+            <EntityTypeMapping TypeName="HastaneModel.Hastalar">
+              <MappingFragment StoreEntitySet="Hastalar">
+                <ScalarProperty Name="HastaNo" ColumnName="HastaNo" />
+                <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+                <ScalarProperty Name="Yas" ColumnName="Yas" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kullanicilars">
+            <EntityTypeMapping TypeName="HastaneModel.Kullanicilar">
+              <MappingFragment StoreEntitySet="Kullanicilar">
+                <ScalarProperty Name="KullaniciNo" ColumnName="KullaniciNo" />
+                <ScalarProperty Name="KullaniciAdi" ColumnName="KullaniciAdi" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Raporlars">
+            <EntityTypeMapping TypeName="HastaneModel.Raporlar">
+              <MappingFragment StoreEntitySet="Raporlar">
+                <ScalarProperty Name="RaporNo" ColumnName="RaporNo" />
+                <ScalarProperty Name="RaporTanimi" ColumnName="RaporTanimi" />
+                <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+                <ScalarProperty Name="SonTarihi" ColumnName="SonTarihi" />
+                <ScalarProperty Name="HastaNo" ColumnName="HastaNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="HastaneModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="DoktorEkle" FunctionName="HastaneModel.Store.DoktorEkle" />
+          <FunctionImportMapping FunctionImportName="DoktorListele" FunctionName="HastaneModel.Store.DoktorListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HastaneModel.DoktorListele_Result">
+                <ScalarProperty Name="DoktorNo" ColumnName="DoktorNo" />
+                <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+                <ScalarProperty Name="Brans" ColumnName="Brans" />
+                <ScalarProperty Name="Uzmanlık" ColumnName="Uzmanlık" />
+                <ScalarProperty Name="RaporNo" ColumnName="RaporNo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="DoktorSil" FunctionName="HastaneModel.Store.DoktorSil" />
+          <FunctionImportMapping FunctionImportName="DoktorYenile" FunctionName="HastaneModel.Store.DoktorYenile" />
+          <FunctionImportMapping FunctionImportName="HastaBilgileriEkle" FunctionName="HastaneModel.Store.HastaBilgileriEkle" />
+          <FunctionImportMapping FunctionImportName="HastaBilgileriSil" FunctionName="HastaneModel.Store.HastaBilgileriSil" />
+          <FunctionImportMapping FunctionImportName="HastaBilgileriYenile" FunctionName="HastaneModel.Store.HastaBilgileriYenile" />
+          <FunctionImportMapping FunctionImportName="HastaBilgisiListele" FunctionName="HastaneModel.Store.HastaBilgisiListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HastaneModel.HastaBilgisiListele_Result">
+                <ScalarProperty Name="BilgiNo" ColumnName="BilgiNo" />
+                <ScalarProperty Name="Teshis" ColumnName="Teshis" />
+                <ScalarProperty Name="MUcret" ColumnName="MUcret" />
+                <ScalarProperty Name="Recete" ColumnName="Recete" />
+                <ScalarProperty Name="TakipDurum" ColumnName="TakipDurum" />
+                <ScalarProperty Name="HastaNo" ColumnName="HastaNo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastaEkle" FunctionName="HastaneModel.Store.HastaEkle" />
+          <FunctionImportMapping FunctionImportName="HastaListele" FunctionName="HastaneModel.Store.HastaListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HastaneModel.HastaListele_Result">
+                <ScalarProperty Name="HastaNo" ColumnName="HastaNo" />
+                <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+                <ScalarProperty Name="Yas" ColumnName="Yas" />
+                <ScalarProperty Name="Adres" ColumnName="Adres" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="HastaSil" FunctionName="HastaneModel.Store.HastaSil" />
+          <FunctionImportMapping FunctionImportName="HastaYenile" FunctionName="HastaneModel.Store.HastaYenile" />
+          <FunctionImportMapping FunctionImportName="KullaniciGiris" FunctionName="HastaneModel.Store.KullaniciGiris">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HastaneModel.KullaniciGiris_Result">
+                <ScalarProperty Name="KullaniciNo" ColumnName="KullaniciNo" />
+                <ScalarProperty Name="KullaniciAdi" ColumnName="KullaniciAdi" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RaporEkle" FunctionName="HastaneModel.Store.RaporEkle" />
+          <FunctionImportMapping FunctionImportName="RaporListele" FunctionName="HastaneModel.Store.RaporListele">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HastaneModel.RaporListele_Result">
+                <ScalarProperty Name="RaporNo" ColumnName="RaporNo" />
+                <ScalarProperty Name="RaporTanimi" ColumnName="RaporTanimi" />
+                <ScalarProperty Name="OlusturmaTarihi" ColumnName="OlusturmaTarihi" />
+                <ScalarProperty Name="SonTarihi" ColumnName="SonTarihi" />
+                <ScalarProperty Name="HastaNo" ColumnName="HastaNo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RaporSil" FunctionName="HastaneModel.Store.RaporSil" />
+          <FunctionImportMapping FunctionImportName="RaporYenile" FunctionName="HastaneModel.Store.RaporYenile" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="HastaneModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="HastaneModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="HastaneModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="HastaneModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HastaneModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="HastaneModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HastaneModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="HastaneModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="HastaneModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

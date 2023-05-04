@@ -1,0 +1,110 @@
+create proc HastaListele
+as begin
+select * from Hastalar 
+end
+create proc HastaEkle 
+@AdSoyad varchar (50),
+@Yas int,
+@Adres varchar(50)
+as begin 
+insert into Hastalar (AdSoyad ,Yas ,Adres) values (@AdSoyad ,@Yas ,@Adres)
+end
+create proc HastaYenile
+@HastaNo int,
+@AdSoyad varchar (50),
+@Yas int,
+@Adres varchar(50)
+as begin
+update Hastalar set AdSoyad =@AdSoyad ,Yas =@Yas ,Adres=@Adres where HastaNo =@HastaNo 
+end
+create proc HastaSil
+@HastaNo int
+as begin 
+delete from Hastalar where HastaNo =@HastaNo
+end
+create proc DoktorListele
+as begin
+select * from Doktorlar  
+end
+create proc DoktorEkle 
+@AdSoyad varchar (50),
+@Brans varchar (50),
+@Uzmanlık varchar(50),
+@RaporNo int
+as begin 
+insert into Doktorlar(AdSoyad ,Brans ,Uzmanlık,RaporNo) values (@AdSoyad ,@Brans ,@Uzmanlık,@RaporNo)
+end
+create proc DoktorYenile
+@DoktorNo int,
+@AdSoyad varchar (50),
+@Brans varchar (50),
+@Uzmanlık varchar(50),
+@RaporNo int
+as begin
+update Doktorlar set AdSoyad =@AdSoyad ,Brans =@Brans ,Uzmanlık=@Uzmanlık,RaporNo=@RaporNo where DoktorNo =@DoktorNo 
+end
+create proc DoktorSil
+@DoktorNo int
+as begin 
+delete from Doktorlar where DoktorNo =@DoktorNo
+end
+create proc RaporListele
+as begin
+select * from Raporlar 
+end
+create proc RaporEkle 
+@RaporTanimi varchar (50),
+@OlusturmaTarihi varchar (50),
+@SonTarihi varchar(50),
+@HastaNo int
+as begin 
+insert into Raporlar(RaporTanimi,OlusturmaTarihi,SonTarihi,HastaNo) values (@RaporTanimi,@OlusturmaTarihi,@SonTarihi,@HastaNo)
+end
+create proc RaporYenile
+@RaporNo int,
+@RaporTanimi varchar (50),
+@OlusturmaTarihi varchar (50),
+@SonTarihi varchar(50),
+@HastaNo int
+as begin
+update Raporlar set RaporTanimi =@RaporTanimi ,OlusturmaTarihi =@OlusturmaTarihi ,SonTarihi=@SonTarihi,HastaNo=@HastaNo where RaporNo =@RaporNo 
+end
+create proc RaporSil
+@RaporNo int
+as begin 
+delete from Raporlar where RaporNo =@RaporNo
+end
+create proc HastaBilgisiListele
+as begin
+select * from HastaBilgileri 
+end
+create proc HastaBilgileriEkle 
+@Teshis varchar (50),
+@MUcret money ,
+@Recete varchar(50),
+@TakipDurum varchar(50),
+@HastaNo int
+as begin 
+insert into HastaBilgileri(Teshis,MUcret ,Recete ,TakipDurum ,HastaNo) values (@Teshis,@MUcret ,@Recete ,@TakipDurum ,@HastaNo)
+end
+create proc HastaBilgileriYenile
+@BilgiNo int,
+@Teshis varchar (50),
+@MUcret money ,
+@Recete varchar(50),
+@TakipDurum varchar(50),
+@HastaNo int
+as begin
+update HastaBilgileri set Teshis =@Teshis ,MUcret =@MUcret ,Recete=@Recete,TakipDurum=@TakipDurum,HastaNo=@HastaNo where BilgiNo =@BilgiNo 
+end
+create proc HastaBilgileriSil
+@BilgiNo int
+as begin 
+delete from HastaBilgileri where BilgiNo =@BilgiNo
+end
+create proc KullaniciGiris
+@KullaniciAdi varchar(50),
+@Sifre varchar(50)
+as begin
+select * from Kullanicilar where KullaniciAdi =@KullaniciAdi and Sifre=@Sifre
+end
